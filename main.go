@@ -1,12 +1,13 @@
 package main
 
 import (
-	"os"
-	"time"
-
 	log "github.com/alecthomas/log4go"
 	"github.com/wanghongfei/gogate/conf"
+	"github.com/wanghongfei/gogate/discovery"
+	"github.com/wanghongfei/gogate/global"
 	serv "github.com/wanghongfei/gogate/server"
+	"os"
+	"time"
 )
 
 func main() {
@@ -25,6 +26,11 @@ func main() {
 		time.Second*1,
 	)
 	checkErrorExit(err, true)
+
+	//将值传递给query,通过global中转防止循环依赖
+	queryGlobal := new(global.QueryGlobal)
+	queryGlobal.Server = server
+	discovery.QuerySetGlobalServer(queryGlobal)
 
 	log.Info("pre filters: %v", server.ExportAllPreFilters())
 	log.Info("post filters: %v", server.ExportAllPostFilters())

@@ -11,50 +11,55 @@ import (
 )
 
 type GateConfig struct {
-	Version					string`yaml:"version"`
+	Version string `yaml:"version"`
 
-	ServerConfig			*ServerConfig`yaml:"server"`
-	RedisConfig				*RedisConfig`yaml:"redis"`
+	ServerConfig *ServerConfig `yaml:"server"`
+	RedisConfig  *RedisConfig  `yaml:"redis"`
 
-	EurekaConfig			*EurekaConfig`yaml:"eureka"`
-	ConsulConfig			*ConsulConfig`yaml:"consul"`
+	EurekaConfig *EurekaConfig `yaml:"eureka"`
+	ConsulConfig *ConsulConfig `yaml:"consul"`
+	NacosConfig  *NacosConfig  `yaml:"nacos"`
 
-	Traffic					*TrafficConfig`yaml:"traffic"`
+	Traffic *TrafficConfig `yaml:"traffic"`
 }
 
 type ServerConfig struct {
-	AppName			string`yaml:"appName"`
-	Host			string`yaml:"host"`
-	Port			int`yaml:"port"`
-	MaxConnection	int`yaml:"maxConnection"`
+	AppName       string `yaml:"appName"`
+	Host          string `yaml:"host"`
+	Port          int    `yaml:"port"`
+	MaxConnection int    `yaml:"maxConnection"`
 	// 请求超时时间, ms
-	Timeout			int`yaml:"timeout"`
-
+	Timeout int `yaml:"timeout"`
 }
 
 type EurekaConfig struct {
-	Enable					bool`yaml:"enable"`
-	ConfigFile				string`yaml:"configFile"`
-	RouteFile				string`yaml:"routeFile"`
-	EvictionDuration		uint`yaml:"evictionDuration"`
-	HeartbeatInterval		int`yaml:"heartbeatInterval"`
+	Enable            bool   `yaml:"enable"`
+	ConfigFile        string `yaml:"configFile"`
+	RouteFile         string `yaml:"routeFile"`
+	EvictionDuration  uint   `yaml:"evictionDuration"`
+	HeartbeatInterval int    `yaml:"heartbeatInterval"`
 }
 
 type ConsulConfig struct {
-	Enable					bool`yaml:"enable"`
-	Address					string`yaml:"address"`
+	Enable  bool   `yaml:"enable"`
+	Address string `yaml:"address"`
 }
 
 type TrafficConfig struct {
-	EnableTrafficRecord		bool`yaml:"enableTrafficRecord"`
-	TrafficLogDir			string`yaml:"trafficLogDir"`
+	EnableTrafficRecord bool   `yaml:"enableTrafficRecord"`
+	TrafficLogDir       string `yaml:"trafficLogDir"`
+}
 
+type NacosConfig struct {
+	Enable bool   `yaml:"enable"`
+	Server string `yaml:"server"`
+	Port   int64  `yaml:"port"`
 }
 
 type RedisConfig struct {
-	Enabled			bool
-	Addr			string
-	RateLimiterLua	string`yaml:"rateLimiterLua"`
+	Enabled        bool
+	Addr           string
+	RateLimiterLua string `yaml:"rateLimiterLua"`
 }
 
 var App *GateConfig
@@ -118,7 +123,6 @@ func validateGogateConfig(config *GateConfig) error {
 		servCfg.Timeout = 3000
 	}
 
-
 	trafficCfg := config.Traffic
 	if trafficCfg.EnableTrafficRecord {
 		if trafficCfg.TrafficLogDir == "" {
@@ -137,4 +141,3 @@ func validateGogateConfig(config *GateConfig) error {
 
 	return nil
 }
-

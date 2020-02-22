@@ -23,6 +23,10 @@ func (serv *Server) refreshRegistry() error {
 
 	} else if conf.App.ConsulConfig.Enable {
 		instances, err = discovery.QueryConsul()
+	} else if conf.App.NacosConfig.Enable {
+		instances, err = discovery.QueryNacos()
+	} else {
+		panic("eureka consult nacos not enabled!")
 	}
 	if nil != err {
 		return err
@@ -99,8 +103,8 @@ func convertToMap(apps []eureka.Application) *sync.Map {
 				instances,
 				&discovery.InstanceInfo{
 					ServiceName: servName,
-					Addr: addr,
-					Meta: meta,
+					Addr:        addr,
+					Meta:        meta,
 				},
 			)
 		}

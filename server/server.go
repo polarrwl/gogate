@@ -22,41 +22,41 @@ import (
 )
 
 type Server struct {
-	host 					string
-	port 					int
+	host string
+	port int
 
 	// 负载均衡组件
-	lb						lb.LoadBalancer
+	lb lb.LoadBalancer
 
 	// 保存listener引用, 用于关闭server
-	listen 					net.Listener
+	listen net.Listener
 	// 是否启用优雅关闭
-	graceShutdown 			bool
+	graceShutdown bool
 	// 优雅关闭最大等待时间
-	maxWait 				time.Duration
-	wg      				*sync.WaitGroup
+	maxWait time.Duration
+	wg      *sync.WaitGroup
 
 	// URI路由组件
-	Router 					*route.Router
+	Router *route.Router
 
 	// 过滤器
-	preFilters  			[]*PreFilter
-	postFilters 			[]*PostFilter
+	preFilters  []*PreFilter
+	postFilters []*PostFilter
 
 	// fasthttp对象
-	fastServ 				*fasthttp.Server
+	fastServ *fasthttp.Server
 
-	isStarted 				bool
+	isStarted bool
 
 	// 保存服务地址
 	// key: 服务名:版本号, 版本号为eureka注册信息中的metadata[version]值
 	// val: []*InstanceInfo
-	registryMap 			*syncmap.InsInfoArrSyncMap
+	registryMap *syncmap.InsInfoArrSyncMap
 
 	// 服务id(string) -> 此服务的限速器对象(*MemoryRateLimiter)
-	rateLimiterMap 			*syncmap.RateLimiterSyncMap
+	rateLimiterMap *syncmap.RateLimiterSyncMap
 
-	trafficStat 			*stat.TraficStat
+	trafficStat *stat.TraficStat
 }
 
 const (
@@ -102,7 +102,7 @@ func NewGatewayServer(host string, port int, routePath string, maxConn int, useG
 
 		lb: &lb.RoundRobinLoadBalancer{},
 
-		Router:       router,
+		Router: router,
 
 		preFilters:  make([]*PreFilter, 0, 3),
 		postFilters: make([]*PostFilter, 0, 3),
@@ -142,7 +142,7 @@ func (serv *Server) Start() error {
 	serv.isStarted = true
 
 	// 监听端口
-	listen, err := net.Listen("tcp", serv.host + ":" + strconv.Itoa(serv.port))
+	listen, err := net.Listen("tcp", serv.host+":"+strconv.Itoa(serv.port))
 	if nil != err {
 		return fmt.Errorf("failed to listen at %s:%d => %w", serv.host, serv.port, err)
 	}
@@ -176,6 +176,10 @@ func (serv *Server) Start() error {
 			// 初始化consul
 			discovery.InitConsulClient()
 
+		} else if conf.App.NacosConfig.Enable {
+			log.Info("nacos enabled")
+			//初始化nacos
+			discovery.InitNacosClient()
 		} else {
 			panic("no registry center specified")
 		}

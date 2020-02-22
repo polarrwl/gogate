@@ -10,28 +10,28 @@ import (
 
 type Router struct {
 	// 配置文件路径
-	cfgPath			string
+	cfgPath string
 
 	// path(string) -> *ServiceInfo
-	pathMatcher		*PathMatcher
+	pathMatcher *PathMatcher
 
-	ServInfos		[]*ServiceInfo
+	ServInfos []*ServiceInfo
 }
 
 type ServiceInfo struct {
-	Id				string
-	Prefix			string
-	Host			string
-	Name			string
-	StripPrefix		bool`yaml:"strip-prefix"`
-	Qps				int
+	Id          string
+	Prefix      string
+	Host        string
+	Name        string
+	StripPrefix bool `yaml:"strip-prefix"`
+	Qps         int
 
-	Canary			[]*CanaryInfo
+	Canary []*CanaryInfo
 }
 
 type CanaryInfo struct {
-	Meta		string
-	Weight		int
+	Meta   string
+	Weight int
 }
 
 func (info *ServiceInfo) String() string {
@@ -44,24 +44,23 @@ func (info *ServiceInfo) String() string {
 * PARAMS:
 *	- path: 路由配置文件路径
 *
-*/
+ */
 func NewRouter(path string) (*Router, error) {
 	matcher, servInfos, err := loadRoute(path)
 	if nil != err {
 		return nil, fmt.Errorf("failed to load route info => %e", err)
 	}
 
-
 	return &Router{
 		pathMatcher: matcher,
-		cfgPath: path,
-		ServInfos: servInfos,
+		cfgPath:     path,
+		ServInfos:   servInfos,
 	}, nil
 }
 
 /*
 * 重新加载路由器
-*/
+ */
 func (r *Router) ReloadRoute() error {
 	matcher, servInfos, err := loadRoute(r.cfgPath)
 	if nil != err {
@@ -74,12 +73,19 @@ func (r *Router) ReloadRoute() error {
 	return nil
 }
 
+//add by polarrwl , 2020.02.21
+func (r *Router) AddServerInfo(info *ServiceInfo) {
+	r.ServInfos = append(r.ServInfos, info)
+	r.pathMatcher.routeMap[info.Prefix] = info
+	r.pathMatcher.routeTrieTree.PutString(info.Prefix, info)
+}
+
 /*
 * 根据uri选择一个最匹配的appId
 *
 * RETURNS:
 *	返回最匹配的ServiceInfo
-*/
+ */
 func (r *Router) Match(reqPath string) *ServiceInfo {
 
 	return r.pathMatcher.Match(reqPath)
@@ -127,9 +133,8 @@ func loadRoute(path string) (*PathMatcher, []*ServiceInfo, error) {
 		servInfos = append(servInfos, info)
 	}
 
-
 	matcher := &PathMatcher{
-		routeMap: routeMap,
+		routeMap:      routeMap,
 		routeTrieTree: tree,
 	}
 	return matcher, servInfos, nil

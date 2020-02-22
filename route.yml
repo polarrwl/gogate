@@ -47,3 +47,8 @@ services:
     prefix: /engine
     strip-prefix: true
 
+  jmfen-sport-passport:
+    id: jmfen-sport-passport
+    prefix: /jmfen-sport-passport
+    strip-prefix: true
+

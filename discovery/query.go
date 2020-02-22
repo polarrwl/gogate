@@ -4,6 +4,7 @@ import (
 	"fmt"
 	log "github.com/alecthomas/log4go"
 	"github.com/hashicorp/consul/api"
+	"github.com/nacos-group/nacos-sdk-go/vo"
 	"strconv"
 	"strings"
 )
@@ -36,8 +37,8 @@ func QueryEureka() ([]*InstanceInfo, error) {
 				instances,
 				&InstanceInfo{
 					ServiceName: servName,
-					Addr: addr,
-					Meta: meta,
+					Addr:        addr,
+					Meta:        meta,
 				},
 			)
 		}
@@ -82,8 +83,8 @@ func QueryConsul() ([]*InstanceInfo, error) {
 			instances,
 			&InstanceInfo{
 				ServiceName: strings.ToUpper(servInfo.Service),
-				Addr: servInfo.Address + ":" + strconv.Itoa(servInfo.Port),
-				Meta: servInfo.Meta,
+				Addr:        servInfo.Address + ":" + strconv.Itoa(servInfo.Port),
+				Meta:        servInfo.Meta,
 			},
 		)
 	}
@@ -92,3 +93,45 @@ func QueryConsul() ([]*InstanceInfo, error) {
 
 }
 
+var queryServerInterface QueryServerInterface
+
+//防止循环依赖,通过接口;这样不用依赖global
+type QueryServerInterface interface {
+	AddServerInfo(name string)
+}
+
+func QuerySetGlobalServer(queryInterface QueryServerInterface) {
+	queryServerInterface = queryInterface
+}
+
+func QueryNacos() ([]*InstanceInfo, error) {
+	services := namingClientObj.GetServiceList(1, 500, "", nil)
+	log.Info(services)
+
+	instances := make([]*InstanceInfo, 0, 10)
+	for _, v := range services.Doms {
+
+		//通过接口添加服务，防止循环依赖
+		queryServerInterface.AddServerInfo(v)
+
+		instanceParam := vo.SelectInstancesParam{
+			ServiceName: v,
+			HealthyOnly: true,
+		}
+		nacosInstances, error := namingClientObj.SelectInstances(instanceParam)
+		if error != nil {
+			log.Error(error)
+		} else {
+			log.Info("nacos instances:", nacosInstances)
+			for _, v2 := range nacosInstances {
+				instances = append(instances, &InstanceInfo{
+					ServiceName: strings.ToUpper(v),
+					Addr:        v2.Ip + ":" + strconv.Itoa(int(v2.Port)),
+					Meta:        v2.Metadata,
+				})
+			}
+		}
+	}
+
+	return instances, nil
+}

@@ -11,7 +11,7 @@ server:
   timeout: 3000
 
 eureka:
-  enable: true
+  enable: false
   # eureka配置文件名
   configFile: eureka.json
   # 路由配置文件名
@@ -25,6 +25,10 @@ consul:
   enable: false
   address: 127.0.0.1:8500
 
+nacos:
+  enable: true
+  server: 127.0.0.1
+  port: 8848
 
 traffic:
   # 是否开启流量记录功能

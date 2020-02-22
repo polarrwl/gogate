@@ -4,12 +4,12 @@
         <type>console</type>
         <!-- level is (:?FINEST|FINE|DEBUG|TRACE|INFO|WARNING|ERROR) -->
         <level>INFO</level>
-        <property name="format">[%D %T] [%L] %M</property>
+        <property name="format">[%D %T] [%L] [%S] %M</property>
     </filter>
     <filter enabled="true">
         <tag>file</tag>
         <type>file</type>
-        <level>ERROR</level>
+        <level>WARNING</level>
         <property name="filename">logs/gogate.log</property>
         <!--
            %T - Time (15:04:05 MST)
@@ -22,7 +22,7 @@
            It ignores unknown format strings (and removes them)
            Recommended: "[%D %T] [%L] (%S) %M"
         -->
-        <property name="format">[%D %T] [%L] %M</property>
+        <property name="format">[%D %T] [%L] [%S] %M</property>
         <property name="rotate">false</property> <!-- true enables log rotation, otherwise append -->
         <property name="maxsize">0M</property> <!-- \d+[KMG]? Suffixes are in terms of 2**10 -->
         <property name="maxlines">0K</property> <!-- \d+[KMG]? Suffixes are in terms of thousands -->
