@@ -1,0 +1,281 @@
+server:
+  undertow:
+    buffer-size: 1024
+    direct-buffers: true
+    io-threads: 16
+    worker-threads: 300
+
+zlt:
+  oauth2:
+    token:
+      store:
+        type: authJwt
+  #        type: resJwt
+  security:
+    forbid:
+      urlEnabled: true
+      httpUrls: >
+        /actuator/**,
+        /**/actuator/**
+    system:
+      filter:
+        -
+          uri: "/jmfen-sport-passport/sys/login2"
+          auth: ["anon"]
+        -
+          uri: "/jmfen-sport-cms-admin/**"
+          auth: ["anon"]
+      auth:
+        urlEnabled: true
+        httpUrls: >
+          /v1/system/user/**
+      ignore:
+        httpUrls: >
+          /v2/system/user/**,
+          /v1/system/menus/**,
+          /sys/login,
+          /admins-anon/mobile,
+          /users-anon/mobile,
+          /menus/**,
+          /v1/system/menu/**,
+          /jmfen-sport-cms/information/v1/**,
+          /jmfen-sport-cms/comment/v1/replies,
+          /jmfen-sport-cms/article/v1/detail/**/**,
+          /jmfen-sport-backend-admin/v1/system/users,
+          /jmfen-sport-backend-admin_dxf/**,
+          /jmfen-sport-backend-admin/sensitive/v1/**,
+          /v1/robot/**,
+          /jmfen-sport-search-center/v1/**
+    ignore:
+      # 忽略认证的地址
+      httpUrls: >
+        /jmfen-sport-usercenter/swagger-ui.html,
+        /api-uaa/**,
+        /api-user/users-anon/**,
+        /login.html,
+        /user/login,
+        /oauth/user/token,
+        /jmfen-sport-passport/app/login,
+        /jmfen-sport-passport/oauth/user/token,
+        /jmfen-sport-scoreapi/**,
+        /jmfen-sport-scoreapiv2/**,
+        /jmfen-sport-scoreapiv2-es/**,
+        /jmfen-sport-shopapi/api/v1/wxnotify.php,
+        /jmfen-sport-shopapi/api/v1/alinotify.php,
+        /jmfen-sport-shopapi/api/v1/user.php,
+        /jmfen-goapi/v1/quiz/rank,
+        /jmfen-goapi/v1/quiz/set,
+        /jmfen-goapi/v1/quiz,
+         /jmfen-goapi/v1/mall/adv,
+        /jmfen-goapi/v1/mall/user,
+        /jmfen-goapi/v1/mall/goods,
+        /jmfen-goapi/v1/mall/goods/info,
+        /jmfen-go-shopapi/v2/anchors/list/commissions,
+        /jmfen-go-shopapi/v2/anchors/room/rank,
+        /jmfen-go-shopapi/v2/anchors/rank,
+        /jmfen-go-shopapi/v2/vips/list,
+        /jmfen-go-shopapi/v2/gifts/**,
+        /jmfen-go-shopapi/v2/anchors/divide/**,
+        /jmfen-go-shopapi/v2/anchors,
+        /jmfen-cms/ucms/api/front/user/implogin,
+        /jmfen-cms/ucms/api/admin/content/list,
+        /jmfen-sport-upload/**,
+        /jmfen-sport-upload/upload,
+        /jmfen-sport-upload/upload/batch/**,
+        /jmfen-sport-upload/cms/upload/batch,
+        /jmfen-sport-upload/cms/test1,
+        /jmfen-sport-upload/cms/test,
+        /jmfen-sport-provider-uploads/**,
+        /jmfen-live/**,
+        /jmfen-live-backend/**,
+        /jmfen-sport-backend-php/**,
+        /jmfen-sport-scoreapi/**,
+        /app/bind/**,
+        /jmfen-sport-passport/app/bind/**,
+        /jmfen-sport-passport/auth/bindmobile,
+        /jmfen-sport-usercenter/app/send/code,
+        /jmfen-sport-usercenter/app/findpwd/check,
+        /jmfen-sport-usercenter/app/findpwd/reset,
+        /jmfen-sport-passport/app/findpwd/reset,
+        /jmfen-sport-usercenter/v1/admin/user/info/**,
+        /jmfen-sport-usercenter/v1/admin/users,
+        /jmfen-sport-usercenter/v1/admin/lock/**,
+        /jmfen-sport-usercenter/v1/admin/unlock/**,
+        /jmfen-sportconfig/**,
+        /jmfen-scoreadmin/**,
+        /jmfen-cms/ucms/api/front/**,
+        /jmfen-sport-provider-sms/notify/v1/read,
+        /jmfen-sport-provider-sms/notify/v1/remind/send,
+        /jmfen-sport-provider-sms/notify/v1/remind/openvip,
+        /jmfen-symphony/**,
+        /jmfen-sport-passport/thirdlogin/**,
+        /thirdlogin/**,
+        /jmfen-sport-passport/third/**,
+        /jmfen-sport-usercenter/v2/users,
+        /jmfen-sport-backend-admin_rwl/**,
+        /jmfen-sport-passport/validata/**,
+        /jmfen-sport-passport/sys/login,
+        /jmfen-sport-backend-admin/v1/app/recom/list,
+        /jmfen-sport-backend-admin/v1/web/recom/list,
+        /jmfen-sport-backend-admin/v1/admin/version/getLatestVersion,
+        /jmfen-sport-backend-admin/v1/admin/**,
+        /jmfen-sport-passport-test/app/login,
+        /jmfen-sport-backend-admin/v1/system/**,
+        /jmfen-sport-usercenter/users-anon/mobile,
+        /jmfen-sport-cms_yjl/channel/v1/hotArticles,
+        /jmfen-sport-cms_yjl/channel/v1/hot,
+        /jmfen-sport-cms_yjl/channel/v1/**,
+        /jmfen-sport-cms_yjl/member/v1/**,
+        /jmfen-sport-cms_yjl/comment/v2.2/mobile/replies,
+        /jmfen-sport-cms_yjl/article/v1.2/detail/**,
+        /jmfen-sport-cms_yjl/member/v1/followingArticles,
+        /jmfen-sport-cms_yjl/comment/v1/mobile/replies,
+        /jmfen-sport-cms-admin-dev/v1/user,
+        /jmfen-sport-cms/comment/v1/replies,
+        /jmfen-sport-cms/comment/v2.2/mobile/replies,
+        /jmfen-sport-cms/comment/v1/mobile/replies,
+        /jmfen-sport-cms/comment/v3.1,
+        /jmfen-sport-cms/article/v3.0.4/articleCount,
+        /jmfen-sport-cms/channel/v1/**,
+        /jmfen-sport-cms/member/v1/{userId},
+        /jmfen-sport-cms/member/v1/{userId}/comments,
+        /jmfen-sport-cms/member/v1/{userId}/followingList,
+        /jmfen-sport-cms/member/v1/{userId}/followerList,
+        /jmfen-sport-cms/member/v1/{userId}/detail,
+        /jmfen-sport-cms/information/**,
+        /jmfen-sport-cms/member/v1/followingArticles,
+        /jmfen-sport-cms/article/v1/detail/**,
+        /jmfen-sport-cms/article/v1.2/detail/**,
+        /jmfen-sport-cms/article/v3.1/detail/**,
+        /jmfen-sport-cms-admin/v1.3/reptile/articles/**,
+        /jmfen-sport-cms-admin/v1/updateMaskHeadImgUrl/task/**,
+        /jmfen-sport-cms/comment/v1.2,
+        /jmfen-sport-cms/clubAccount/v3.2/articleList,
+        /jmfen-sport-cms/clubAccount/v3.2/info,
+        /jmfen-sport-cms/information/v1/**/recommend,
+        /jmfen-sport-cms-admin/v1/user,
+        /jmfen-sport-backend-admin/v1/system/users,
+        /**/actuator/info,
+        /jmfen-sport-backend-admin_dxf/**,
+        /jmfen-sport-usercenter/app/check/code,
+        /jmfen-sport-backend-admin/sensitive/v1/**,
+        /jmfen-business-demo-consumer/**,
+        /jmfen-sport-cms_rwl/**,
+        /jmfen-sport-cms_luoma/**,
+        /jmfen-sport-cms-admin_luoma/**,
+        /jmfen-sport-cms_zws/**,
+        /jmfen-sport-cms-provider_gws/**,
+        /jmfen-sport-cms-admin_gws/**,
+        /jmfen-sport-cms/article/v1/share,
+        /jmfen-sport-cms/article/v1/ids/articles,
+        /jmfen-sport-cms/article/v1/articlesForRecommend,
+        /jmfen-sport-cms/upload/image,
+        /v1/robot/**,
+        /admins-anon/usersInRange,
+        /v1/config/comment/list,
+        /v1.3/reptile/articles,
+        /liveStreamServerTencent/**,
+        /jmfen-sport-provider-sms/sms/sendGeneral,
+        /jmfen-sport-search-center/v1/**,
+        /jmfen-sport-usercenter/v2/app/send/code,
+        /jmfen-sport-usercenter/app/check/Captcha,
+        /jmfen-sport-webspider_luoma/**,
+        /jmfen-sport-upload_luoma/**,
+        /jmfen-sport-cms-admin/v1/reptile/comments,
+        /jmfen-sport-passport/v2/gt,
+        /jmfen-sport-passport/v2/app/login,
+        /jmfen-sport-backend-admin/v1/admin/channel/**,
+        /jmfen-sport-passport/v2/gt,
+        /jmfen-sport-passport/v2/app/login,
+        /jmfen-sport-usercenter/v1/robot/users/batch/query,
+        /jmfen-sport-cms/v3.0.2/poll/getPollTheme,
+        /jmfen-sport-backend-admin/general/v1/ip/location,
+        /jmfen-sport-cms/clubAccount/v3.0.2/batchAccounts,
+        /jmfen-sport-cms/clubAccount/v3.0.2/accountList,
+        /jmfen-sport-passport/v1/wx/token,
+        /jmfen-sport-passport/v1/wx/jsapi/sign,
+        /jmfen-sport-test/**,
+        /jmfen-sport-cms/member/v4.0/{userId}/followingList,
+        /jmfen-sport-backend-admin/sensitive/config/query/list,
+        /jmfen-sport-backend-admin/sensitive/config/lib/add,
+        /jmfen-sport-backend-admin/sensitive/config/lib/update,
+        /jmfen-sport-backend-admin/sensitive/config/lib/delete,
+        /jmfen-sport-backend-admin/sensitive/config/keyword/add,
+        /jmfen-sport-backend-admin/sensitive/config/keyword/search,
+        /jmfen-sport-backend-admin/sensitive/config/keyword/delete,
+        /jmfen-sport-cms-admin/v1/check/article,
+        /jmfen-sport-cms-admin/v1/channelId,
+        /jmfen-sport-cms-admin/v1.3/reptile/articles,
+        /jmfen-sport-cms-admin/v1/reptile/comments,
+        /jmfen-sport-cms-admin_zws/**,
+        /jmfen-sport-usercenter/v1/robot/users/edit,
+        /jmfen-sport-backend-admin/v1/admin/versionChannel/getVersionChannel,
+        /jmfen-sport-recommend-service/**,
+        /jmfen-sport-recommend-admin/**,
+        /jmfen-sport-usercenter/v1/users/activity/register,
+        /jmfen-sport-usercenter/v1/users/activity/info,
+        /jmfen-score-datarepair_lm/**,
+        /jmfen-sport-backend-admin/v1/admin/promotionChannel/getChannel,
+        /jmfen-sport-backend-admin/v1/admin/friendlyLink/getFriendlyLink,
+        /jmfen-sport-passport/v1/oneClickLogin,
+        /jmfen-sport-backend-admin/v1/admin/promotionChannel/getAllChannel,
+        /jmfen-sport-provider-sms/msgtpl/v1/push/setting,
+        /jmfen-go-score-datarepair/**,
+        /jmfen-sport-backend-admin/v1/admin/popConfig/getPopConfig,
+        /jmfen-sport-usercenter/v1/users/activityJoin/joinStatus,
+        /jmfen-sport-datacenter/monitoring/advertise/android/internal,
+        /jmfen-sport-activitycenter-front/v1/activity/front/activityInfo/list,
+        /jmfen-sport-activitycenter-front/v1/activity/front/getActivityDetail
+      # 配置只认证登录，登录后所有角色都能访问的url
+      menusPaths: /api-user/menus/current
+    auth:
+      # 配置必需认证的url
+      httpUrls: >
+        /api-uaa/clients/**,
+        /jmfen-sport-backend-admin/v1/system/globaltree,
+        /jmfen-sport-backend-admin/v1/system/users
+      #是否开启url级别权限
+      urlEnabled: false
+    replay:
+      timeout: 120
+      enableCheck: false
+zuul:
+  host:
+    max-total-connections: 2000 # 默认值
+    max-per-route-connections: 1000 # 默认值
+    semaphore:
+      max-semaphores: 5000
+ribbon:
+  MaxTotalConnections: 5000   # 默认值
+  MaxConnectionsPerHost: 1000 # 默认值
+jmfen:
+  ribbon:
+    gray:
+      iplist: >
+        192.168.101.202:1035,
+        192.168.101.202:1038,
+        192.168.101.202.1039
+  sentinel:
+    dingding:
+      enabled: false
+      robotUrl: 'https://oapi.dingtalk.com/robot/send?access_token=1efb52ac12f3ebd904954ea9a8cee7d3c9c252753c50212f65e2e97cb350a4e9'
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: http://192.168.101.96:8847
+      filter:
+        enabled: false
+        jmfenabled: true
+      datasource:
+        ds5:
+          nacos:
+            server-addr: ${zlt.nacos.server-addr}
+            dataId: sentinel-param-flow
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: param-flow
+
+security:
+  power: false
+

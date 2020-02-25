@@ -308,5 +308,15 @@ gogate会记录过去`1s`内各个微服务的请求数据，包括成功请求�
 
 ## 扩展的能力(2020.02.21)
 
-### 增加NACOS配置
+### 增加NACOS处理
+
+gotate.yml中增加配置
+```text
+nacos:
+  enable: true
+  server: 127.0.0.1
+  port: 8848
+```
+
+
 
