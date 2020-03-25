@@ -78,6 +78,10 @@ func InitNacosClient() {
 		Enable:    true,
 		Healthy:   true,
 		Ephemeral: true,
+		Metadata: map[string]string{
+			"content":                   "/",
+			"preserved.register.source": "GO",
+		},
 	})
 
 	alertlog.Info("nacos客戶端注冊結果:", success)
