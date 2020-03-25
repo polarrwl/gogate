@@ -13,6 +13,8 @@ const (
 	ROUTE_INFO   = "key_route_info"
 
 	RELOAD_PATH = "/_mgr/reload"
+
+	ACTUATOR_HEALTH_PATH = "/actuator/health"
 )
 
 // HTTP请求处理方法.
@@ -43,6 +45,13 @@ func (serv *Server) HandleRequest(ctx *fasthttp.RequestCtx) {
 		ctx.WriteString("ok")
 		return
 	}
+
+	//add by polar, 2020.03.35 端点Health返回
+	if path == ACTUATOR_HEALTH_PATH {
+		ctx.WriteString("{\"msg\":\"ok\"}")
+		return;
+	}
+
 
 	newReq := new(fasthttp.Request)
 	ctx.Request.CopyTo(newReq)
