@@ -15,6 +15,7 @@ const (
 	RELOAD_PATH = "/_mgr/reload"
 
 	ACTUATOR_HEALTH_PATH = "/actuator/health"
+	ACTUATOR_INFO_PATH = "/actuator/info"
 )
 
 // HTTP请求处理方法.
@@ -48,7 +49,11 @@ func (serv *Server) HandleRequest(ctx *fasthttp.RequestCtx) {
 
 	//add by polar, 2020.03.35 端点Health返回
 	if path == ACTUATOR_HEALTH_PATH {
-		ctx.WriteString("{\"msg\":\"ok\"}")
+		ctx.WriteString("{\"msg\":\"health ok\"}")
+		return;
+	}
+	if path == ACTUATOR_INFO_PATH {
+		ctx.WriteString("{\"msg\":\"info ok\"}")
 		return;
 	}
 

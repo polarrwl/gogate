@@ -3,13 +3,37 @@ package server
 import (
 	"fmt"
 	log "github.com/alecthomas/log4go"
+	"github.com/wanghongfei/gogate/conf"
 	"github.com/wanghongfei/gogate/discovery"
 	"github.com/wanghongfei/gogate/server/route"
+	"net"
 	"strings"
+	"time"
 
 	"github.com/valyala/fasthttp"
 	"github.com/wanghongfei/gogate/utils"
 )
+
+var fastReqClient *fasthttp.Client;
+
+func GetFastHttpClient() *fasthttp.Client {
+	if(fastReqClient == nil) {
+
+		fastReqClient = &fasthttp.Client{
+			Dial: func(addr string) (net.Conn, error) {
+				conn, error := fasthttp.Dial(addr);
+				conn.(*net.TCPConn).SetLinger(0);
+				return conn, error;
+			},
+			Name: "fasthttp_gateway",
+			MaxConnWaitTimeout: 3*time.Second, //获取请求如果连接池没有的情况下等待时间
+			ReadTimeout: 10*time.Second, //设置timeout字段，不然fasthttp会占满
+			MaxConnsPerHost: conf.App.ServerConfig.MaxConnsPerHost,
+		}
+		fmt.Println("创建fasthttp:", fastReqClient)
+	}
+	return fastReqClient
+}
 
 // 转发请求到指定微服务
 // return:
@@ -60,8 +84,10 @@ func (serv *Server) sendRequest(ctx *fasthttp.RequestCtx, req *fasthttp.Request)
 
 	// 发请求
 	resp := new(fasthttp.Response)
-	err := fasthttp.Do(req, resp)
+	//err := fasthttp.Do(req, resp)
+	err := GetFastHttpClient().Do(req, resp)
 	if nil != err {
+		GetFastHttpClient();
 		return nil, "", fmt.Errorf("failed to send request to downstream service => %w", err)
 	}
 

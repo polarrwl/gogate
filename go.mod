@@ -18,9 +18,10 @@ require (
 	github.com/buger/jsonparser v0.0.0-20191204142016-1a29609e0929 // indirect
 	github.com/golang/mock v1.4.0 // indirect
 	github.com/hashicorp/consul/api v1.0.1
+	github.com/kr/pretty v0.2.0 // indirect
 	github.com/mediocregopher/radix.v2 v0.0.0-20181115013041-b67df6e626f9
 	github.com/nacos-group/nacos-sdk-go v0.0.0-20191128082542-fe1b325b125c
-	github.com/valyala/fasthttp v1.4.0
+	github.com/valyala/fasthttp v1.12.0
 	github.com/wanghongfei/go-eureka-client v1.1.0
 	gopkg.in/yaml.v2 v2.2.2
 )

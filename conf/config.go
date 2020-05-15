@@ -28,6 +28,7 @@ type ServerConfig struct {
 	Host          string `yaml:"host"`
 	Port          int    `yaml:"port"`
 	MaxConnection int    `yaml:"maxConnection"`
+	MaxConnsPerHost	int	`yaml:"maxConnsPerHost"`
 	// 请求超时时间, ms
 	Timeout int `yaml:"timeout"`
 }
